@@ -5,17 +5,23 @@
   <thead>
     <tr>
       <th>Title</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Status</th>
       <th>Description</th>
       <th>Edit</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><%= @task.title %></td>
+      <td><%= @task.title %> (Priority: <%= @task.priority %>)</td>
+      <td><%= @task.start_time %></td>
+      <td><%= @task.end_time %></td>
+      <td><%= @task.status %></td>
       <td><%= @task.description %></td>
       <td>
         <%= link_to 'Edit', edit_task_path(id: @task.id) %>
-        <%= link_to 'Delete', task_path(id: @task.id), method: 'delete', data: { confirm: 'Are you sure?' } %>
+        <%= delete_link_to 'Delete', task_path(id: @task.id) %>
       </td>
     </tr>
   </tbody>
