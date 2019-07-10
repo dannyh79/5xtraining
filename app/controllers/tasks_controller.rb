@@ -13,7 +13,7 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
-      redirect_to tasks_path, notice: 'Success: a new task is created!'
+      redirect_to tasks_path, notice: t('.notice')
     else
       render :new
     end
@@ -27,18 +27,21 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to tasks_path, notice: 'Success: the task is updated!'
+      redirect_to tasks_path, notice: t('.notice')
     else
       render :edit
     end
   end
 
   def destroy
-    if @task.destroy
-      redirect_to tasks_path, notice: 'Success: the task is deleted!'
+    if @task
+      @task.destroy
+      redirect_to tasks_path, notice: t('.notice')
+    else
+      redirect_to (request.referer || tasks_path), alert: 'Failed: could not find/delete the task'
     end
+    
   end
-
 
   private
 

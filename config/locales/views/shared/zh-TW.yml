@@ -1,0 +1,8 @@
+zh-TW:
+  site_title: '讓我貼貼看：簡易任務管理系統'
+  are_you_sure: '你確定嗎？'
+  helpers:
+    submit:
+      task:
+        create: "建立 %{model}"
+        update: "更新 %{model}"

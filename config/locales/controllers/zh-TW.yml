@@ -1,0 +1,9 @@
+zh-TW:
+  tasks:
+    create:
+      notice: '任務新增成功！'
+    update: 
+      notice: '任務內容更新成功！'
+    destroy:
+      notice: '任務刪除成功！'
+      alert: '資料庫查無此任務！' 

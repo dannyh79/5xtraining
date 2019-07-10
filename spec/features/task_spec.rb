@@ -44,25 +44,37 @@ RSpec.describe Task, type: :feature do
   describe 'create a task' do
     it 'with title and description' do
       create_task_with(title, description)
-      expect(page).to have_content('Success: a new task is created!')
+      expect(page).to have_content("#{I18n.t("tasks.create.notice")}")
       expect(page).to have_content(title)
       expect(page).to have_content(description)
     end
 
     it 'without input' do
       create_task_with(nil, nil)
-      expect(page).to have_content('Title can\'t be blank')
-      expect(page).to have_content('Description can\'t be blank')
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.title")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
+      ")
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.description")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.description.blank")}
+      ")
     end
     
     it 'without title' do
       create_task_with(nil, description)
-      expect(page).to have_content('Title can\'t be blank')
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.title")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
+      ")
     end
 
     it 'without description' do
       create_task_with(title, nil)
-      expect(page).to have_content('Description can\'t be blank')
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.description")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.description.blank")}
+      ")
     end
   end
 
@@ -86,7 +98,7 @@ RSpec.describe Task, type: :feature do
 
       edit_task_with(new_title, new_description)
       
-      expect(page).to have_content('Success: the task is updated!')
+      expect(page).to have_content("#{I18n.t("tasks.update.notice")}")
       expect(page).to have_content(new_title)
       expect(page).to have_content(new_description)
     end
@@ -96,8 +108,14 @@ RSpec.describe Task, type: :feature do
       visit the_edit_task_path(title)
       edit_task_with()
       
-      expect(page).to have_content('Title can\'t be blank')
-      expect(page).to have_content('Description can\'t be blank')
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.title")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
+      ")
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.description")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.description.blank")}
+      ")
     end
 
     it 'without title' do
@@ -105,22 +123,28 @@ RSpec.describe Task, type: :feature do
       visit the_edit_task_path(title)
       edit_task_with(nil, new_description)
       
-      expect(page).to have_content('Title can\'t be blank')
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.title")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
+      ")
     end
     
     it 'without description' do
       create_task_with(title, description)
       visit the_edit_task_path(title)
       edit_task_with(new_title)
-      expect(page).to have_content('Description can\'t be blank')
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.description")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.description.blank")}
+      ")
     end
   end
 
   describe 'delete a task' do
     it do
       create_task_with(title, description)
-      click_on 'Delete'
-      expect(page).to have_content('Success: the task is deleted!')
+      click_on "#{I18n.t("tasks.table.delete")}"
+      expect(page).to have_content("#{I18n.t("tasks.destroy.notice")}")
     end
   end
 
@@ -129,17 +153,17 @@ RSpec.describe Task, type: :feature do
   def create_task_with(title, description)
     visit new_task_path
     within('form.form_task') do
-      fill_in 'Title', with: title
-      fill_in 'Description', with: description
-      click_on 'Create Task'
+      fill_in "#{I18n.t("tasks.table.title")}", with: title
+      fill_in "#{I18n.t("tasks.table.description")}", with: description
+      click_on "#{I18n.t("helpers.submit.task.create", model: I18n.t("activerecord.models.task"))}"
     end
   end
 
   def edit_task_with(new_title = nil, new_description = nil)
     within('form.form_task') do
-      fill_in 'Title', with: new_title
-      fill_in 'Description', with: new_description
-      click_on 'Update Task'
+      fill_in "#{I18n.t("tasks.table.title")}", with: new_title
+      fill_in "#{I18n.t("tasks.table.description")}", with: new_description
+      click_on "#{I18n.t("helpers.submit.task.update", model: I18n.t("activerecord.models.task"))}"
     end
   end
 

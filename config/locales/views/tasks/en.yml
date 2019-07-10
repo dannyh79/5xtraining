@@ -1,0 +1,30 @@
+en:
+  tasks:
+    heading:
+      index: 'Task List'
+      create_a_new_task: 'Create a New Task'
+      view_task: 'View Task'
+      edit_the_task: 'Edit the Task'
+    table:
+      create_a_new_task: 'Create a New Task'
+      title: 'Title'
+      priority: 'Priority:'
+      start_time: 'Start Time'
+      end_time: 'End Time'
+      status: 'Status'
+      description: 'Description'
+      edit: 'Edit'
+      delete: 'Delete'
+      view: 'View'
+    form:
+      title: 'Title:'
+      priority: 'Priority:'
+      start_time: 'Start Time:'
+      end_time: 'End Time:'
+      status: 'Status:'
+      description: 'Description:'
+      placeholder:
+        title: 'e.g. "Sweep the floor"'
+        description: 'e.g. "Also take garbage out to the bin"'
+      submit: 'Create Task'
+    back_to_task_list: 'Back to Task List'

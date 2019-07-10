@@ -1,0 +1,9 @@
+en:
+  tasks:
+    create:
+      notice: 'Success: a new task is created!'
+    update: 
+      notice: 'Success: the task is updated!'
+    destroy:
+      notice: 'Success: the task is deleted!'
+      alert: 'Failed: could not find/delete the task' 
