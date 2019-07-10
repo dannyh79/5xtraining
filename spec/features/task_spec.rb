@@ -4,17 +4,40 @@ RSpec.describe Task, type: :feature do
   let(:title) { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
-  describe 'index' do
+  describe 'visit the index of tasks' do
     it do
+      3.times do
+        create(:task)
+      end
       visit tasks_path
-      expect(page).to have_css('h1', text: 'Task List')
-      expect(page).to have_css('a', text: 'Create a New Task')
-      expect(page).to have_css('table th', text: 'Title')
-      expect(page).to have_css('table th', text: 'Start Time')
-      expect(page).to have_css('table th', text: 'End Time')
-      expect(page).to have_css('table th', text: 'Status')
-      expect(page).to have_css('table th', text: 'Description')
-      expect(page).to have_css('table th', text: 'Edit')
+
+      # test if the data entries are shown in index page
+      expect(page).to have_css(
+                                'table tbody tr:first-child td:first-child', 
+                                text: "#{Task.first.title}"
+                              )
+      expect(page).to have_css(
+                                'table tbody tr:first-child td:nth-child(5)', 
+                                text: "#{Task.first.description}"
+                              )
+      
+      expect(page).to have_css(
+                                'table tbody tr:nth-child(2) td:first-child', 
+                                text: "#{Task.second.title}"
+                              )
+      expect(page).to have_css(
+                                'table tbody tr:nth-child(2) td:nth-child(5)', 
+                                text: "#{Task.second.description}"
+                              )
+      
+      expect(page).to have_css(
+                                'table tbody tr:nth-child(3) td:first-child', 
+                                text: "#{Task.third.title}"
+                              )
+      expect(page).to have_css(
+                                'table tbody tr:nth-child(3) td:nth-child(5)', 
+                                text: "#{Task.third.description}"
+                              )
     end
   end
 
