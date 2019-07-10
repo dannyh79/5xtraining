@@ -3,15 +3,23 @@ require 'rails_helper'
 RSpec.describe Task, type: :feature do
   let(:title) { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
+  let(:new_title) { Faker::Lorem.sentence }
+  let(:new_description) { Faker::Lorem.paragraph }
 
-  describe 'visit the index of tasks' do
+  describe 'visit the index of tasks' do    
     it do
+      visit tasks_path
+      expect(Task.any?).to be false
+      expect(page).not_to have_css('table tbody tr')
+  
       3.times do
         create(:task)
       end
-      visit tasks_path
-
+      
+      expect(Task.all.size).to be 3
+      
       # test if the data entries are shown in index page
+      visit tasks_path
       expect(page).to have_css(
                                 'table tbody tr:first-child td:first-child', 
                                 text: "#{Task.first.title}"
@@ -43,32 +51,55 @@ RSpec.describe Task, type: :feature do
 
   describe 'create a task' do
     it 'with title and description' do
+      expect(Task.any?).to be false
+
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
       expect(page).to have_content('Success: a new task is created!')
       expect(page).to have_content(title)
       expect(page).to have_content(description)
     end
 
     it 'without input' do
+      expect(Task.any?).to be false
+
       create_task_with(nil, nil)
+
+      expect(Task.any?).to be false
       expect(page).to have_content('Title can\'t be blank')
       expect(page).to have_content('Description can\'t be blank')
     end
     
     it 'without title' do
+      expect(Task.any?).to be false
+
       create_task_with(nil, description)
+      
+      expect(Task.any?).to be false
       expect(page).to have_content('Title can\'t be blank')
     end
 
     it 'without description' do
+      expect(Task.any?).to be false
+
       create_task_with(title, nil)
+
+      expect(Task.any?).to be false
       expect(page).to have_content('Description can\'t be blank')
     end
   end
 
   describe 'view a task' do
     it do
+      expect(Task.any?).to be false
+
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
+
       visit the_task_path(title)
   
       expect(page).to have_content(title)
@@ -77,14 +108,20 @@ RSpec.describe Task, type: :feature do
   end
 
   describe 'edit a task' do
-    let(:new_title) { Faker::Lorem.sentence }
-    let(:new_description) { Faker::Lorem.paragraph }
-
     it 'with new title and new description' do
+      expect(Task.any?).to be false
+      
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
+      
       visit the_edit_task_path(title)
 
       edit_task_with(new_title, new_description)
+
+      expect(Task.first.title).to eq new_title
+      expect(Task.first.description).to eq new_description
       
       expect(page).to have_content('Success: the task is updated!')
       expect(page).to have_content(new_title)
@@ -92,35 +129,70 @@ RSpec.describe Task, type: :feature do
     end
 
     it 'without input' do
+      expect(Task.any?).to be false
+
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
+
       visit the_edit_task_path(title)
       edit_task_with()
       
       expect(page).to have_content('Title can\'t be blank')
       expect(page).to have_content('Description can\'t be blank')
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
     end
 
     it 'without title' do
+      expect(Task.any?).to be false
+
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
+
       visit the_edit_task_path(title)
+
       edit_task_with(nil, new_description)
       
       expect(page).to have_content('Title can\'t be blank')
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
     end
     
     it 'without description' do
+      expect(Task.any?).to be false
+
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
+
       visit the_edit_task_path(title)
+
       edit_task_with(new_title)
+
       expect(page).to have_content('Description can\'t be blank')
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
     end
   end
 
   describe 'delete a task' do
     it do
+      expect(Task.any?).to be false
+
       create_task_with(title, description)
+
+      expect(Task.first.title).to eq title
+      expect(Task.first.description).to eq description
+
       click_on 'Delete'
+
       expect(page).to have_content('Success: the task is deleted!')
+      expect(Task.any?).to be false
     end
   end
 
