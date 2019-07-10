@@ -2,12 +2,14 @@
 <%= link_to 'Create a New Task', new_task_path %>
 <table>
   <thead>
-    <th>Title</th>
-    <th>Start Time</th>
-    <th>End Time</th>
-    <th>Status</th>
-    <th>Description</th>
-    <th>Edit</th>
+    <tr>
+      <th>Title</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Status</th>
+      <th>Description</th>
+      <th>Edit</th>
+    </tr>
   </thead>
   <tbody>
     <% @tasks.each do |task| %>      
