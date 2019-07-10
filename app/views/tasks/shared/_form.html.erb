@@ -8,13 +8,13 @@
 
 <%= form_for(task, html: { class: 'form_task' }) do |form| %>
   <div>
-    <%= form.label :title, "#{I18n.t("tasks.form.title")}" %>
-    <%= form.text_field :title, placeholder: "#{I18n.t("tasks.form.placeholder.title")}" %>
+    <%= form.label :title, I18n.t("tasks.form.title") %>
+    <%= form.text_field :title, placeholder: I18n.t("tasks.form.placeholder.title") %>
   </div>  
   
   <div>
-    <%= form.label :description, "#{I18n.t("tasks.form.description")}" %>
-    <%= form.text_area :description, placeholder: "#{I18n.t("tasks.form.placeholder.description")}" %>
+    <%= form.label :description, I18n.t("tasks.form.description") %>
+    <%= form.text_area :description, placeholder: I18n.t("tasks.form.placeholder.description") %>
   </div>  
 
   <%= form.submit %>

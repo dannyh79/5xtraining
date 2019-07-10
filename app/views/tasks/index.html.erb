@@ -1,5 +1,5 @@
 <h1><%= I18n.t("tasks.heading.index") %></h1>
-<%= link_to "#{I18n.t("tasks.table.create_a_new_task")}", new_task_path %>
+<%= link_to I18n.t("tasks.table.create_a_new_task"), new_task_path %>
 <table>
   <thead>
     <tr>
@@ -20,11 +20,11 @@
         <td><%= task.end_time %></td>
         <td>
           <span class="ellipsis"><%= task.description %></span>
-          <%= link_to "#{I18n.t("tasks.table.view")}", task_path(task.id) %>
+          <%= link_to I18n.t("tasks.table.view"), task_path(task.id) %>
         </td>
         <td>
-          <%= link_to "#{I18n.t("tasks.table.edit")}", edit_task_path(id: task.id) %>
-          <%= delete_link_to "#{I18n.t("tasks.table.delete")}", task_path(id: task.id) %>
+          <%= link_to I18n.t("tasks.table.edit"), edit_task_path(id: task.id) %>
+          <%= delete_link_to I18n.t("tasks.table.delete"), task_path(id: task.id) %>
         </td>
       </tr>
     <% end %>
