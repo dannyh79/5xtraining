@@ -6,3 +6,19 @@ zh-TW:
       task:
         create: "建立 %{model}"
         update: "更新 %{model}"
+  time:
+    am: '上午'
+    pm: '下午'
+    formats:
+      default: "%Y年%m月%d日 %A %H:%M:%S %Z"
+      long: "%Y年%m月%d日 %H:%M"
+      short: "%m月%d日 %H:%M"
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%m月%d日"
+      long: "%Y年%m月%d日"
+    day_names: [週一, 週二, 週三, 週四, 週五, 週六, 週日]
+    abbr_day_names: [週一, 週二, 週三, 週四, 週五, 週六, 週日]
+    month_names: [~, 一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月]
+    abbr_month_names: [~, 一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月]

@@ -6,6 +6,8 @@ en:
       task:
         title: 'Title'
         description: 'Description'
+        start_time: 'Start time'
+        end_time: 'End time'
     errors:
       models:
         task:
@@ -13,4 +15,5 @@ en:
             title:
               blank: 'CAN NOT BE BLANK!'
             description:
-              blank: 'CAN NOT BE BLANK!'  
+              blank: 'CAN NOT BE BLANK!'
+            must_be_after_the_start_time: 'must be after the start time!'

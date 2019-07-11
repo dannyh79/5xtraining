@@ -6,6 +6,8 @@ zh-TW:
       task:
         title: '任務標題'
         description: '任務描述'
+        start_time: '任務開始時間'
+        end_time: '任務結束時間'
     errors:
       models:
         task:
@@ -13,4 +15,5 @@ zh-TW:
             title:
               blank: '不能為空白！'
             description:
-              blank: '不能為空白！' 
+              blank: '不能為空白！'
+            must_be_after_the_start_time: '一定要在任務開始時間之後！'

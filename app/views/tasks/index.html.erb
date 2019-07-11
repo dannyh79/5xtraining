@@ -16,8 +16,8 @@
       <tr>
         <td><%= task.title %> (<%= I18n.t("tasks.table.priority") %> <%= task.priority %>)</td>
         <td><%= task.status %></td>
-        <td><%= task.start_time %></td>
-        <td><%= task.end_time %></td>
+        <td><%= I18n.l(task.start_time, format: :long) %></td>
+        <td><%= I18n.l(task.end_time, format: :long) %></td>
         <td>
           <span class="ellipsis"><%= task.description %></span>
           <%= link_to I18n.t("tasks.table.view"), task_path(task.id) %>
