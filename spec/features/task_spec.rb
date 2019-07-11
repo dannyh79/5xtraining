@@ -14,29 +14,29 @@ RSpec.describe Task, type: :feature do
       # test if the data entries are shown in index page
       expect(page).to have_css(
                                 'table tbody tr:first-child td:first-child', 
-                                text: "#{Task.first.title}"
+                                text: Task.first.title
                               )
       expect(page).to have_css(
                                 'table tbody tr:first-child td:nth-child(5)', 
-                                text: "#{Task.first.description}"
+                                text: Task.first.description
                               )
       
       expect(page).to have_css(
                                 'table tbody tr:nth-child(2) td:first-child', 
-                                text: "#{Task.second.title}"
+                                text: Task.second.title
                               )
       expect(page).to have_css(
                                 'table tbody tr:nth-child(2) td:nth-child(5)', 
-                                text: "#{Task.second.description}"
+                                text: Task.second.description
                               )
       
       expect(page).to have_css(
                                 'table tbody tr:nth-child(3) td:first-child', 
-                                text: "#{Task.third.title}"
+                                text: Task.third.title
                               )
       expect(page).to have_css(
                                 'table tbody tr:nth-child(3) td:nth-child(5)', 
-                                text: "#{Task.third.description}"
+                                text: Task.third.description
                               )
     end
   end
@@ -44,7 +44,7 @@ RSpec.describe Task, type: :feature do
   describe 'create a task' do
     it 'with title and description' do
       create_task_with(title, description)
-      expect(page).to have_content("#{I18n.t("tasks.create.notice")}")
+      expect(page).to have_content(I18n.t("tasks.create.notice"))
       expect(page).to have_content(title)
       expect(page).to have_content(description)
     end
@@ -98,7 +98,7 @@ RSpec.describe Task, type: :feature do
 
       edit_task_with(new_title, new_description)
       
-      expect(page).to have_content("#{I18n.t("tasks.update.notice")}")
+      expect(page).to have_content(I18n.t("tasks.update.notice"))
       expect(page).to have_content(new_title)
       expect(page).to have_content(new_description)
     end
@@ -143,8 +143,8 @@ RSpec.describe Task, type: :feature do
   describe 'delete a task' do
     it do
       create_task_with(title, description)
-      click_on "#{I18n.t("tasks.table.delete")}"
-      expect(page).to have_content("#{I18n.t("tasks.destroy.notice")}")
+      click_on I18n.t("tasks.table.delete")
+      expect(page).to have_content(I18n.t("tasks.destroy.notice"))
     end
   end
 
@@ -153,17 +153,17 @@ RSpec.describe Task, type: :feature do
   def create_task_with(title, description)
     visit new_task_path
     within('form.form_task') do
-      fill_in "#{I18n.t("tasks.table.title")}", with: title
-      fill_in "#{I18n.t("tasks.table.description")}", with: description
-      click_on "#{I18n.t("helpers.submit.task.create", model: I18n.t("activerecord.models.task"))}"
+      fill_in I18n.t("tasks.table.title"), with: title
+      fill_in I18n.t("tasks.table.description"), with: description
+      click_on I18n.t("helpers.submit.task.create", model: I18n.t("activerecord.models.task"))
     end
   end
 
   def edit_task_with(new_title = nil, new_description = nil)
     within('form.form_task') do
-      fill_in "#{I18n.t("tasks.table.title")}", with: new_title
-      fill_in "#{I18n.t("tasks.table.description")}", with: new_description
-      click_on "#{I18n.t("helpers.submit.task.update", model: I18n.t("activerecord.models.task"))}"
+      fill_in I18n.t("tasks.table.title"), with: new_title
+      fill_in I18n.t("tasks.table.description"), with: new_description
+      click_on I18n.t("helpers.submit.task.update", model: I18n.t("activerecord.models.task"))
     end
   end
 
