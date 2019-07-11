@@ -8,7 +8,7 @@ module TasksHelper
       link_to label, 
       url, 
       method: 'delete', 
-      data: { confirm: "#{I18n.t("are_you_sure")}" } 
+      data: { confirm: I18n.t("are_you_sure") } 
     )
   end
 end
