@@ -1,0 +1,8 @@
+en:
+  site_title: 'Let Me Post It: A Light-Weighted Task Manager'
+  are_you_sure: 'Are you sure?'
+  helpers:
+    submit:
+      task:
+        create: "Create %{model}"
+        update: "Update %{model}" 

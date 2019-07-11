@@ -1,4 +1,4 @@
-<h1>Create a new task</h1>
-<%= link_to 'Back to Task List', tasks_path %>
+<h1><%= I18n.t("tasks.heading.create_a_new_task") %></h1>
+<%= link_to I18n.t("tasks.back_to_task_list"), tasks_path %>
 
 <%= render 'tasks/shared/form', task: @task %>
