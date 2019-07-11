@@ -48,13 +48,11 @@ RSpec.describe Task, type: :feature do
 
   describe 'create a task' do
     it 'with title and description' do
-      create_task_with(title, description)
-      expect(page).to have_content(I18n.t("tasks.create.notice"))
       expect{ create_task_with(title, description) }.to change{ Task.count }.from(0).to(1)
 
       expect(Task.first.title).to eq title
       expect(Task.first.description).to eq description
-      expect(page).to have_content((I18n.t("tasks.create.notice"))
+      expect(page).to have_content(I18n.t("tasks.create.notice"))
       expect(page).to have_content(title)
       expect(page).to have_content(description)
     end
