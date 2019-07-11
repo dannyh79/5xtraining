@@ -27,4 +27,10 @@ zh-TW:
         title: "例：掃地"
         description: "例：順便把垃圾拿出去外面丟"
       submit: '新增任務'
+    form_select:
+      attributes:
+        created_at: '依建立時間：'
+      asc: '升冪'
+      desc: '降冪'
+      submit: '送出'
     back_to_task_list: '回到任務清單'

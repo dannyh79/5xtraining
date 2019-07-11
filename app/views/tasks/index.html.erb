@@ -1,6 +1,18 @@
 <h1><%= I18n.t("tasks.heading.index") %></h1>
 <%= link_to I18n.t("tasks.table.create_a_new_task"), new_task_path %>
-<table>
+
+<%= form_tag({ controller: "tasks", action: "index" }, method: "get", class: 'form_sort') do |form| %>
+  <label for="created_at"><%= I18n.t("tasks.form_select.attributes.created_at") %></label>
+  <select name="created_at" id="created_at">
+    <option value=""></option>
+    <option value="asc"><%= I18n.t("tasks.form_select.asc") %></option>
+    <option value="desc"><%= I18n.t("tasks.form_select.desc") %></option>
+  </select>
+
+  <%= submit_tag "#{I18n.t("tasks.form_select.submit")}"%>
+<% end %>
+
+<table id="table_tasks">
   <thead>
     <tr>
       <th><%= I18n.t("tasks.table.title") %></th>

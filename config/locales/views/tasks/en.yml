@@ -27,4 +27,10 @@ en:
         title: 'e.g. "Sweep the floor"'
         description: 'e.g. "Also take garbage out to the bin"'
       submit: 'Create Task'
+    form_select:
+      attributes:
+        created_at: 'By time created: '
+      asc: 'Ascending'
+      desc: 'Descending'
+      submit: 'Submit'
     back_to_task_list: 'Back to Task List'
