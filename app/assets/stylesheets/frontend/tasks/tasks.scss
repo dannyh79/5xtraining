@@ -7,7 +7,7 @@
   text-overflow: ellipsis;
 }
 
-.sort_link_asc::after {
+.sort_link.asc::after {
   content: '';
   display: inline-block;
   height: 0;
@@ -17,7 +17,7 @@
   border-right: 5px solid transparent;
 }
 
-.sort_link_desc::after {
+.sort_link.desc::after {
   content: '';
   display: inline-block;
   height: 0;

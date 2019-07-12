@@ -1,6 +1,6 @@
 module TasksHelper
   def flash_message(message_type)
-    %Q(<p class="#{message_type}"\>#{flash[message_type]}</p\>).html_safe
+    %Q(<p class="flash_#{message_type}"\>#{flash[message_type]}</p\>).html_safe
   end
 
   def delete_link_to(label, url)
@@ -14,9 +14,9 @@ module TasksHelper
 
   def sort_link_to(label, url, param)
     if params[param] == "asc"
-      return link_to label, { controller: url, action: 'index', params: { created_at: 'desc' } }, class: 'sort_link_asc'
+      return link_to label, { controller: url, action: 'index', params: { created_at: 'desc' } }, class: 'sort_link asc'
     elsif params[param] == "desc"
-      return link_to label, { controller: url, action: 'index', params: { created_at: 'asc' } }, class: 'sort_link_desc'
+      return link_to label, { controller: url, action: 'index', params: { created_at: 'asc' } }, class: 'sort_link desc'
       
       # The following for page's default views
     else
