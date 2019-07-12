@@ -8,7 +8,8 @@ en:
     table:
       create_a_new_task: 'Create a New Task'
       title: 'Title'
-      priority: 'Priority:'
+      priority: 'Priority'
+      created_at: 'Created_at'
       start_time: 'Start Time'
       end_time: 'End Time'
       status: 'Status'
@@ -27,10 +28,4 @@ en:
         title: 'e.g. "Sweep the floor"'
         description: 'e.g. "Also take garbage out to the bin"'
       submit: 'Create Task'
-    form_select:
-      attributes:
-        created_at: 'By time created: '
-      asc: 'Ascending'
-      desc: 'Descending'
-      submit: 'Submit'
     back_to_task_list: 'Back to Task List'

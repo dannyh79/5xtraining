@@ -154,11 +154,7 @@ RSpec.describe Task, type: :feature do
 
   describe 'sorting' do
     before do
-      @tasks = []
-      3.times do |index|
-        task = create(:task, title: "#{index} #{title}")
-        @tasks << task
-      end
+      @tasks = 3.times.map { |index| create(:task, title: "#{index} #{title}") }
   
       visit tasks_path
     end
@@ -191,8 +187,6 @@ RSpec.describe Task, type: :feature do
       end
     end
   end
-
-
 
   private
 

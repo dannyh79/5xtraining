@@ -1,6 +1,5 @@
 class Task < ApplicationRecord
-  scope :created_at_asc, -> { order(created_at: :asc) }
-  scope :created_at_desc, -> { order(created_at: :desc)}
+  scope :with_created_at, -> (param) { order(created_at: param) }
 
   validates :title, :description, presence: true
 end

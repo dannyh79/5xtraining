@@ -2,14 +2,7 @@ class TasksController < ApplicationController
   before_action :find_task, only: [:show, :edit, :update, :destroy]
 
   def index
-    case params[:created_at]
-    when "asc"
-      @tasks = Task.created_at_asc
-    when "desc"
-      @tasks = Task.created_at_desc
-    end
-
-    @tasks = Task.all if @tasks.nil?
+    @tasks = Task.with_created_at(params[:created_at] || "asc")
   end
 
   def new
