@@ -21,14 +21,11 @@ RSpec.describe Task, type: :helper do
   end
 
   describe 'delete_link_to' do
-    let(:result) {
-      link_to 'some_label', 
-      'some_path', 
-      method: 'delete', 
-      data: { confirm: I18n.t("are_you_sure") } 
+    let(:result_link) {
+      %Q(<a data-confirm="#{I18n.t("are_you_sure")}" rel="nofollow" data-method="delete" href="some_path">some_label</a>)
     }
     it 'should return a delete_link_to' do
-      expect(delete_link_to('some_label', 'some_path')).to eq result
+      expect(delete_link_to('some_label', 'some_path')).to eq result_link
     end
   end
 

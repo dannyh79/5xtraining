@@ -14,13 +14,24 @@ module TasksHelper
 
   def sort_link_to(label, url, param)
     if params[param] == "asc"
-      return link_to label, { controller: url, action: 'index', params: { created_at: 'desc' } }, class: 'sort_link asc'
+      return (
+        link_to label,
+        { controller: url, action: 'index', params: { param => 'desc' } },
+        class: 'sort_link asc'
+      )
     elsif params[param] == "desc"
-      return link_to label, { controller: url, action: 'index', params: { created_at: 'asc' } }, class: 'sort_link desc'
+      return (
+        link_to label,
+        { controller: url, action: 'index', params: { param => 'asc' } },
+        class: 'sort_link desc'
+      )
       
       # The following for page's default views
     else
-      return link_to label, { controller: url, action: 'index', params: { created_at: 'desc' } }
+      return (
+        link_to label,
+        { controller: url, action: 'index', params: { param => 'desc' } }
+      )
     end
   end
 end
