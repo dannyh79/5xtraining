@@ -9,6 +9,7 @@ zh-TW:
       create_a_new_task: '創建一個新的任務'
       title: '標題'
       priority: '優先度'
+      created_at: '建立時間'
       start_time: '開始時間'
       end_time: '結束時間'
       status: '目前狀態'

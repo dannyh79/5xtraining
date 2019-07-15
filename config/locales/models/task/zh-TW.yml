@@ -14,6 +14,10 @@ zh-TW:
           attributes:
             title:
               blank: '不能為空白！'
+            start_time:
+                blank: '不能為空白！'
+            end_time:
+                blank: '不能為空白！'
             description:
               blank: '不能為空白！'
             must_be_after_the_start_time: '一定要在任務開始時間之後！'

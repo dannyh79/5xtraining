@@ -1,6 +1,8 @@
 class Task < ApplicationRecord
-  validates :title, :description, :start_time, :end_time, presence: true
+  validates :title, :start_time, :end_time, :description, presence: true
   validate :end_time_after_start_time
+
+  scope :with_created_at, ->(param) { order(created_at: param) }
 
   private
 

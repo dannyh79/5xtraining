@@ -2,53 +2,31 @@ require 'rails_helper'
 
 RSpec.describe Task, type: :feature do
   let(:title) { Faker::Lorem.sentence }
+  let(:start_time) { DateTime.now }
+  let(:end_time) { DateTime.now + 1.day }
   let(:description) { Faker::Lorem.paragraph }
+
   let(:new_title) { Faker::Lorem.sentence }
+  let(:new_start_time) { DateTime.now + 1.day }
+  let(:new_end_time) { DateTime.now + 2.day }
   let(:new_description) { Faker::Lorem.paragraph }
   let(:task) { create(:task) }
 
-  describe 'visit the index of tasks' do    
-    it do  
-      3.times do
-        create(:task)
-      end
+  describe 'visit the index of tasks' do
+    it 'should show all the tasks' do  
+      expect{ 3.times { create(:task) } }.to change{ Task.count }.from(0).to(3)
       
-      expect(Task.count).to be 3
-      
-      # test if the data entries are shown in index page
       visit tasks_path
-      expect(page).to have_css(
-                                'table tbody tr:first-child td:first-child', 
-                                text: Task.first.title
-                              )
-      expect(page).to have_css(
-                                'table tbody tr:first-child td:nth-child(5)', 
-                                text: Task.first.description
-                              )
-      
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(2) td:first-child', 
-                                text: Task.second.title
-                              )
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(2) td:nth-child(5)', 
-                                text: Task.second.description
-                              )
-      
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(3) td:first-child', 
-                                text: Task.third.title
-                              )
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(3) td:nth-child(5)', 
-                                text: Task.third.description
-                              )
+
+      titles = all('#table_tasks tr > td:first-child').map(&:text)
+      result = Task.all.map { |task| "#{task.title} (#{I18n.t("tasks.table.priority")} #{task.priority})" }
+      expect(titles).to eq result
     end
   end
 
   describe 'create a task' do
     it 'with title and description' do
-      expect{ create_task_with(title, description) }.to change{ Task.count }.from(0).to(1)
+      expect{ create_task_with(title, start_time, end_time, description) }.to change{ Task.count }.from(0).to(1)
 
       expect(Task.first.title).to eq title
       expect(Task.first.description).to eq description
@@ -58,7 +36,7 @@ RSpec.describe Task, type: :feature do
     end
 
     it 'without input' do
-      expect{ create_task_with(nil, nil) }.not_to change{ Task.count }
+      expect{ create_task_with(nil, nil, nil, nil) }.not_to change{ Task.count }
       expect(page).to have_content("
         #{I18n.t("activerecord.attributes.task.title")} 
         #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
@@ -70,15 +48,31 @@ RSpec.describe Task, type: :feature do
     end
     
     it 'without title' do
-      expect{ create_task_with(nil, description) }.not_to change{ Task.count }
+      expect{ create_task_with(nil, start_time, end_time, description) }.not_to change{ Task.count }
       expect(page).to have_content("
         #{I18n.t("activerecord.attributes.task.title")} 
         #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
       ")
     end
     
+    it 'without start_time' do
+      expect{ create_task_with(title, nil, end_time, description) }.not_to change{ Task.count }
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.start_time")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.start_time.blank")}
+      ")
+    end
+    
+    it 'without end_time' do
+      expect{ create_task_with(title, start_time, nil, description) }.not_to change{ Task.count }
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.end_time")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.end_time.blank")}
+      ")
+    end
+    
     it 'without description' do
-      expect{ create_task_with(title, nil) }.not_to change{ Task.count }
+      expect{ create_task_with(title, start_time, end_time, nil) }.not_to change{ Task.count }
       expect(page).to have_content("
         #{I18n.t("activerecord.attributes.task.description")} 
         #{I18n.t("activerecord.errors.models.task.attributes.description.blank")}
@@ -87,11 +81,12 @@ RSpec.describe Task, type: :feature do
   end
 
   describe 'view a task' do
-    it do
-      visit the_task_path(task.title)
-  
-      expect(page).to have_content(task.title)
-      expect(page).to have_content(task.description)
+    context 'views' do
+      it 'should have task\'s title and description' do
+        visit the_task_path(task.title)
+        expect(page).to have_content(task.title)
+        expect(page).to have_content(task.description)
+      end
     end
   end
 
@@ -100,6 +95,7 @@ RSpec.describe Task, type: :feature do
       create(:task)
       visit the_edit_task_path(Task.last.title)
     end
+
     it 'with new title and new description' do
       expect{ edit_task_with(new_title, new_description) }.not_to change { Task.count }
 
@@ -141,24 +137,68 @@ RSpec.describe Task, type: :feature do
   end
 
   describe 'delete a task' do
-    it do
-      create_task_with(title, description)
-      expect{ click_on I18n.t("tasks.table.delete") }.to change{ Task.count }.by(-1)
+    context 'views' do
+      it 'should not have the deleted task\'s title and description' do
+        create(:task)
+        old_task_title = Task.last.title
+        old_task_description = Task.last.description
 
-      expect(page).to have_content(I18n.t("tasks.destroy.notice"))
-      # check if there's still remnant info, from the deleted, in views
-      expect(page).not_to have_content(title)
-      expect(page).not_to have_content(description)
+        visit tasks_path
+        expect{ click_on I18n.t("tasks.table.delete") }.to change{ Task.count }.by(-1)
+  
+        expect(page).to have_content(I18n.t("tasks.destroy.notice"))
+        expect(page).not_to have_content(old_task_title)
+        expect(page).not_to have_content(old_task_description)
+      end
+    end
+  end
+
+  describe 'sorting' do
+    let(:asc_result) { Task.order(created_at: :asc).pluck(:title) }
+    let(:desc_result) { Task.order(created_at: :desc).pluck(:title) }
+
+    before do
+      visit tasks_path
+    end
+
+    it 'by "created_at" ASC' do
+      # initial load
+      text_initial_load = all('tr>td:first-child').map(&:text)
+      expect(text_initial_load).to eq(asc_result)
+      
+      # first click: became desc
+      click_on I18n.t("tasks.table.created_at")
+      text_after_first_click = all('tr>td:first-child').map(&:text)
+      expect(text_after_first_click).to eq(desc_result)
+      
+      # second click: became asc
+      click_on I18n.t("tasks.table.created_at")
+      text_after_second_click = all('tr>td:first-child').map(&:text)
+      expect(text_after_second_click).to eq(asc_result)
+    end
+
+    it 'by "created_at" DESC' do
+      # initial load
+      text_initial_load = all('tr>td:first-child').map(&:text)
+      expect(text_initial_load).to eq(asc_result)
+      
+      # click: became desc
+      click_on I18n.t("tasks.table.created_at")
+      text_after_click = all('tr>td:first-child').map(&:text)
+      expect(text_after_click).to eq(desc_result)      
     end
   end
 
   private
 
-  def create_task_with(title, description)
+  def create_task_with(title, start_time, end_time, description)
     visit new_task_path
     within('form.form_task') do
       fill_in I18n.t("tasks.table.title"), with: title
+      fill_in I18n.t("tasks.table.start_time"), with: start_time
+      fill_in I18n.t("tasks.table.end_time"), with: end_time
       fill_in I18n.t("tasks.table.description"), with: description
+
       click_on I18n.t("helpers.submit.task.create", model: I18n.t("activerecord.models.task"))
     end
   end

@@ -1,9 +1,11 @@
 <h1><%= I18n.t("tasks.heading.index") %></h1>
 <%= link_to I18n.t("tasks.table.create_a_new_task"), new_task_path %>
-<table>
+
+<table id="table_tasks">
   <thead>
     <tr>
       <th><%= I18n.t("tasks.table.title") %></th>
+      <th><%= sort_link_to I18n.t("tasks.table.created_at"), tasks_path, :created_at %></th>
       <th><%= I18n.t("tasks.table.start_time") %></th>
       <th><%= I18n.t("tasks.table.end_time") %></th>
       <th><%= I18n.t("tasks.table.status") %></th>
@@ -15,9 +17,10 @@
     <% @tasks.each do |task| %>      
       <tr>
         <td><%= task.title %> (<%= I18n.t("tasks.table.priority") %> <%= task.priority %>)</td>
+        <td><%= I18n.l(task.created_at, format: :long) %></td>
+        <td><%= I18n.l(task.start_time, format: :long) if task.start_time %></td>
+        <td><%= I18n.l(task.end_time, format: :long) if task.end_time %></td>
         <td><%= task.status %></td>
-        <td><%= I18n.l(task.start_time, format: :long) %></td>
-        <td><%= I18n.l(task.end_time, format: :long) %></td>
         <td>
           <span class="ellipsis"><%= task.description %></span>
           <%= link_to I18n.t("tasks.table.view"), task_path(task.id) %>

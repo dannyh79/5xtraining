@@ -14,12 +14,12 @@
 
   <div>
     <%= form.label :start_time, I18n.t("tasks.form.start_time") %>
-    <%= form.datetime_select :start_time, :ampm => true, :order => [:day, :month, :year] %>
+    <%= form.datetime_field :start_time %>
   </div>
 
   <div>
     <%= form.label :end_time, I18n.t("tasks.form.end_time") %>
-    <%= form.datetime_select :end_time, :ampm => true, :order => [:day, :month, :year] %>
+    <%= form.datetime_field :end_time %>
   </div>
 
   <div>
