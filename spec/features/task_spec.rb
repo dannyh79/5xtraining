@@ -2,8 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Task, type: :feature do
   let(:title) { Faker::Lorem.sentence }
+  let(:start_time) { DateTime.now }
+  let(:end_time) { DateTime.now + 1.day }
   let(:description) { Faker::Lorem.paragraph }
+
   let(:new_title) { Faker::Lorem.sentence }
+  let(:new_start_time) { DateTime.now + 1.day }
+  let(:new_end_time) { DateTime.now + 2.day }
   let(:new_description) { Faker::Lorem.paragraph }
   let(:task) { create(:task) }
 
@@ -21,7 +26,7 @@ RSpec.describe Task, type: :feature do
 
   describe 'create a task' do
     it 'with title and description' do
-      expect{ create_task_with(title, description) }.to change{ Task.count }.from(0).to(1)
+      expect{ create_task_with(title, start_time, end_time, description) }.to change{ Task.count }.from(0).to(1)
 
       expect(Task.first.title).to eq title
       expect(Task.first.description).to eq description
@@ -31,7 +36,7 @@ RSpec.describe Task, type: :feature do
     end
 
     it 'without input' do
-      expect{ create_task_with(nil, nil) }.not_to change{ Task.count }
+      expect{ create_task_with(nil, nil, nil, nil) }.not_to change{ Task.count }
       expect(page).to have_content("
         #{I18n.t("activerecord.attributes.task.title")} 
         #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
@@ -43,15 +48,31 @@ RSpec.describe Task, type: :feature do
     end
     
     it 'without title' do
-      expect{ create_task_with(nil, description) }.not_to change{ Task.count }
+      expect{ create_task_with(nil, start_time, end_time, description) }.not_to change{ Task.count }
       expect(page).to have_content("
         #{I18n.t("activerecord.attributes.task.title")} 
         #{I18n.t("activerecord.errors.models.task.attributes.title.blank")}
       ")
     end
     
+    it 'without start_time' do
+      expect{ create_task_with(title, nil, end_time, description) }.not_to change{ Task.count }
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.start_time")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.start_time.blank")}
+      ")
+    end
+    
+    it 'without end_time' do
+      expect{ create_task_with(title, start_time, nil, description) }.not_to change{ Task.count }
+      expect(page).to have_content("
+        #{I18n.t("activerecord.attributes.task.end_time")} 
+        #{I18n.t("activerecord.errors.models.task.attributes.end_time.blank")}
+      ")
+    end
+    
     it 'without description' do
-      expect{ create_task_with(title, nil) }.not_to change{ Task.count }
+      expect{ create_task_with(title, start_time, end_time, nil) }.not_to change{ Task.count }
       expect(page).to have_content("
         #{I18n.t("activerecord.attributes.task.description")} 
         #{I18n.t("activerecord.errors.models.task.attributes.description.blank")}
@@ -118,13 +139,16 @@ RSpec.describe Task, type: :feature do
   describe 'delete a task' do
     context 'views' do
       it 'should not have the deleted task\'s title and description' do
-        create_task_with(title, description)
+        create(:task)
+        old_task_title = Task.last.title
+        old_task_description = Task.last.description
+
+        visit tasks_path
         expect{ click_on I18n.t("tasks.table.delete") }.to change{ Task.count }.by(-1)
   
         expect(page).to have_content(I18n.t("tasks.destroy.notice"))
-        # check if there's still remnant info, from the deleted, in views
-        expect(page).not_to have_content(title)
-        expect(page).not_to have_content(description)
+        expect(page).not_to have_content(old_task_title)
+        expect(page).not_to have_content(old_task_description)
       end
     end
   end
@@ -167,11 +191,14 @@ RSpec.describe Task, type: :feature do
 
   private
 
-  def create_task_with(title, description)
+  def create_task_with(title, start_time, end_time, description)
     visit new_task_path
     within('form.form_task') do
       fill_in I18n.t("tasks.table.title"), with: title
+      fill_in I18n.t("tasks.table.start_time"), with: start_time
+      fill_in I18n.t("tasks.table.end_time"), with: end_time
       fill_in I18n.t("tasks.table.description"), with: description
+
       click_on I18n.t("helpers.submit.task.create", model: I18n.t("activerecord.models.task"))
     end
   end
