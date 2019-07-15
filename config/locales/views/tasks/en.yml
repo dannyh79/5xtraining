@@ -8,7 +8,8 @@ en:
     table:
       create_a_new_task: 'Create a New Task'
       title: 'Title'
-      priority: 'Priority:'
+      priority: 'Priority'
+      created_at: 'Created_at'
       start_time: 'Start Time'
       end_time: 'End Time'
       status: 'Status'

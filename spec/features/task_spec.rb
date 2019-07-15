@@ -7,42 +7,15 @@ RSpec.describe Task, type: :feature do
   let(:new_description) { Faker::Lorem.paragraph }
   let(:task) { create(:task) }
 
-  describe 'visit the index of tasks' do    
-    it do  
-      3.times do
-        create(:task)
-      end
+  describe 'visit the index of tasks' do
+    it 'should show all the tasks' do  
+      expect{ 3.times { create(:task) } }.to change{ Task.count }.from(0).to(3)
       
-      expect(Task.count).to be 3
-      
-      # test if the data entries are shown in index page
       visit tasks_path
-      expect(page).to have_css(
-                                'table tbody tr:first-child td:first-child', 
-                                text: Task.first.title
-                              )
-      expect(page).to have_css(
-                                'table tbody tr:first-child td:nth-child(5)', 
-                                text: Task.first.description
-                              )
-      
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(2) td:first-child', 
-                                text: Task.second.title
-                              )
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(2) td:nth-child(5)', 
-                                text: Task.second.description
-                              )
-      
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(3) td:first-child', 
-                                text: Task.third.title
-                              )
-      expect(page).to have_css(
-                                'table tbody tr:nth-child(3) td:nth-child(5)', 
-                                text: Task.third.description
-                              )
+
+      titles = all('#table_tasks tr > td:first-child').map(&:text)
+      result = Task.all.map { |task| "#{task.title} (#{I18n.t("tasks.table.priority")} #{task.priority})" }
+      expect(titles).to eq result
     end
   end
 
@@ -87,11 +60,12 @@ RSpec.describe Task, type: :feature do
   end
 
   describe 'view a task' do
-    it do
-      visit the_task_path(task.title)
-  
-      expect(page).to have_content(task.title)
-      expect(page).to have_content(task.description)
+    context 'views' do
+      it 'should have task\'s title and description' do
+        visit the_task_path(task.title)
+        expect(page).to have_content(task.title)
+        expect(page).to have_content(task.description)
+      end
     end
   end
 
@@ -100,6 +74,7 @@ RSpec.describe Task, type: :feature do
       create(:task)
       visit the_edit_task_path(Task.last.title)
     end
+
     it 'with new title and new description' do
       expect{ edit_task_with(new_title, new_description) }.not_to change { Task.count }
 
@@ -141,14 +116,52 @@ RSpec.describe Task, type: :feature do
   end
 
   describe 'delete a task' do
-    it do
-      create_task_with(title, description)
-      expect{ click_on I18n.t("tasks.table.delete") }.to change{ Task.count }.by(-1)
+    context 'views' do
+      it 'should not have the deleted task\'s title and description' do
+        create_task_with(title, description)
+        expect{ click_on I18n.t("tasks.table.delete") }.to change{ Task.count }.by(-1)
+  
+        expect(page).to have_content(I18n.t("tasks.destroy.notice"))
+        # check if there's still remnant info, from the deleted, in views
+        expect(page).not_to have_content(title)
+        expect(page).not_to have_content(description)
+      end
+    end
+  end
 
-      expect(page).to have_content(I18n.t("tasks.destroy.notice"))
-      # check if there's still remnant info, from the deleted, in views
-      expect(page).not_to have_content(title)
-      expect(page).not_to have_content(description)
+  describe 'sorting' do
+    let(:asc_result) { Task.order(created_at: :asc).pluck(:title) }
+    let(:desc_result) { Task.order(created_at: :desc).pluck(:title) }
+
+    before do
+      visit tasks_path
+    end
+
+    it 'by "created_at" ASC' do
+      # initial load
+      text_initial_load = all('tr>td:first-child').map(&:text)
+      expect(text_initial_load).to eq(asc_result)
+      
+      # first click: became desc
+      click_on I18n.t("tasks.table.created_at")
+      text_after_first_click = all('tr>td:first-child').map(&:text)
+      expect(text_after_first_click).to eq(desc_result)
+      
+      # second click: became asc
+      click_on I18n.t("tasks.table.created_at")
+      text_after_second_click = all('tr>td:first-child').map(&:text)
+      expect(text_after_second_click).to eq(asc_result)
+    end
+
+    it 'by "created_at" DESC' do
+      # initial load
+      text_initial_load = all('tr>td:first-child').map(&:text)
+      expect(text_initial_load).to eq(asc_result)
+      
+      # click: became desc
+      click_on I18n.t("tasks.table.created_at")
+      text_after_click = all('tr>td:first-child').map(&:text)
+      expect(text_after_click).to eq(desc_result)      
     end
   end
 
