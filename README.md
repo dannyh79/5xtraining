@@ -57,3 +57,16 @@ A Rails app for task management
 
 ## Running the Automated Test Suite
 - `$ bundle exec guard`
+
+## Deploying the App onto Heroku
+1. Create a Heroku account
+2. Download & install the Heroku CLI
+  > Mac OS users can download/install Heroku CLI via Homebrew from Terminal:
+  >> `$ brew tap heroku/brew && brew install heroku`
+3. Under the app's directory, run `$ heroku create` to create a Heroku app
+4. `$ git remote -v` to confirm that a remote named heroku has been set for the app
+5. `$ git push heroku master` to push the code onto Heroku from master branch
+6. `$ heroku run bundle`
+7. `$ heroku db:create`
+8. `$ heroku rails db:migrate`
+9. (optional) Renaming the app: `$ heroku apps:rename new_name --app old_name`
