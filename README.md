@@ -1,5 +1,5 @@
 # Let's Post It
-[![Build Status](https://travis-ci.org/emn178/js-md5.svg?branch=master)](https://travis-ci.org/dannyh79/let_me-post_it)
+[![Build Status](https://travis-ci.org/emn178/js-md5.svg?branch=master)](https://travis-ci.org/dannyh79/lets_post_it)
 
 A Rails app for task management
 
